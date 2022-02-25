@@ -77,7 +77,9 @@ def main():
         'loading the model into Edge TPU memory.')
   for _ in range(args.count):
     start = time.perf_counter()
+    print(1)
     interpreter.invoke()
+    print(2)
     inference_time = time.perf_counter() - start
     classes = classify.get_classes(interpreter, args.top_k, args.threshold)
     

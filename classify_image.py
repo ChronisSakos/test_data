@@ -45,7 +45,7 @@ def main():
       formatter_class=argparse.ArgumentDefaultsHelpFormatter)
   parser.add_argument('-m', '--model', required=True,
                       help='File path of .tflite file.')
-  parser.add_argument('-i', '--input', required=True,
+  parser.add_argument('-i', '--input', required=False,
                       help='Image to be classified.')
   parser.add_argument('-l', '--labels',
                       help='File path of labels file.')
@@ -62,10 +62,10 @@ def main():
   interpreter = make_interpreter(*args.model.split('@'))
   interpreter.allocate_tensors()
 
-  size = common.input_size(interpreter)
-  print(size)
-  image = Image.open(args.input).convert('RGB').resize(size, Image.ANTIALIAS)
-  #image = np.random.randint(255,size=(120,7))
+  #size = common.input_size(interpreter)
+  #print(size)
+  #image = Image.open(args.input).convert('RGB').resize(size, Image.ANTIALIAS)
+  image = np.random.randint(255,size=(30,1))
   print(image)
   common.set_input(interpreter, image)
 

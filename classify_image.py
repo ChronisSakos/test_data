@@ -45,7 +45,7 @@ def main():
       formatter_class=argparse.ArgumentDefaultsHelpFormatter)
   parser.add_argument('-m', '--model', required=True,
                       help='File path of .tflite file.')
-  parser.add_argument('-i', '--input', required=False,
+  parser.add_argument('-i', '--input', required=True,
                       help='Image to be classified.')
   parser.add_argument('-l', '--labels',
                       help='File path of labels file.')
@@ -62,11 +62,11 @@ def main():
   interpreter = make_interpreter(*args.model.split('@'))
   interpreter.allocate_tensors()
 
-  #size = common.input_size(interpreter)
-  #print(size)
-  #image = Image.open(args.input).convert('RGB').resize(size, Image.ANTIALIAS)
-  image = np.random.randint(255,size=(30,1))
-  print(image)
+  size = common.input_size(interpreter)
+  print(size)
+  image = Image.open(args.input).convert('RGB').resize(size, Image.ANTIALIAS)
+  #image = np.random.randint(255,size=(8))
+  #iprint(image)
   common.set_input(interpreter, image)
 
   t = 0
@@ -77,9 +77,7 @@ def main():
         'loading the model into Edge TPU memory.')
   for _ in range(args.count):
     start = time.perf_counter()
-    print(1)
     interpreter.invoke()
-    print(2)
     inference_time = time.perf_counter() - start
     classes = classify.get_classes(interpreter, args.top_k, args.threshold)
     
